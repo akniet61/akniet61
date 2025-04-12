@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение от Акниета</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+        
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.7) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .question {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 50px;
+            transform: translateY(0);
+            transition: transform 0.5s;
+            max-width: 80%;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover::after {
+            transform: translateX(0);
+        }
+        
+        .btn-yes {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .btn-no {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            position: relative;
+        }
+        
+        .signature {
+            font-family: 'Pacifico', cursive;
+            color: white;
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: fall 5s linear forwards;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh - 100px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 80%;
+            transform: scale(0.7);
+            transition: all 0.5s;
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #11998e;
+        }
+        
+        .modal-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        
+        @media (min-width: 768px) {
+            .question {
+                font-size: 3.5rem;
+            }
+            
+            .buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<img src='O.jpg'style="width:100vw; height:100vh; object-fit:cover; margin:0; padding:0; border:none;">
+    <div class="background"></div>
+    <div class="overlay">
+        <div class="question">Пойдешь же гулять да?</div>
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="sayYes()">Разумеется, все ради тебя, хоть и в ад))))))))))</button>
+            <button class="btn btn-no" onmouseover="moveButton()">Нет, иди нахуй</button>
+        </div>
+        <div class="signature">from Akniet</div>
+    </div>
+    
+    <div class="modal" id="success-modal">
+        <div class="modal-content">
+            <div class="modal-title">Спасибо! ❤️</div>
+            <div class="modal-text"> ну я тебя понимаю.я бы тоже пошла бы с собой гулять дээ</div>
+            <button class="modal-button" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        const noButton = document.querySelector('.btn-no');
+        const modal = document.getElementById('success-modal');
+        const background = document.querySelector('.background');
+        const question = document.querySelector('.question');
+        
+        function moveButton() {
+            // Получаем размеры экрана
+            const maxX = window.innerWidth - noButton.offsetWidth - 20;
+            const maxY = window.innerHeight - noButton.offsetHeight - 20;
+            
+            // Генерируем случайные координаты
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            // Перемещаем кнопку
+            noButton.style.position = 'fixed';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            noButton.style.zIndex = '100';
+        }
+        
+        function sayYes() {
+            // Показываем модальное окно
+            modal.classList.add('show');
+            
+            // Создаем конфетти
+            createConfetti();
+            
+            // Изменяем фон
+            background.style.filter = 'brightness(1) blur(5px)';
+            question.style.transform = 'translateY(-100px)';
+        }
+        
+        function closeModal() {
+            modal.classList.remove('show');
+            background.style.filter = 'brightness(0.7)';
+            question.style.transform = 'translateY(0)';
+        }
+        
+        function createConfetti() {
+            // Количество конфетти
+            const confettiCount = 200;
+            
+            // Цвета конфетти
+            const colors = ['#FF3366', '#36FF66', '#6633FF', '#FFCC33', '#33CCFF', '#CC33FF'];
+            
+            // Создаем элементы конфетти
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Рандомные стили
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Удаляем конфетти после анимации
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // Инициализируем начальное положение кнопки "Нет"
+        document.addEventListener('DOMContentLoaded', function() {
+            noButton.style.position = 'relative';
+            noButton.style.left = '0';
+            noButton.style.top = '0';
+        });
+    </script>
+</body>
+</html>
